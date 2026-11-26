@@ -80,3 +80,33 @@ Archivo: `sql/stg_agi2_ekag.sql` (vista `staging.stg_agi2_ekag`).
 | **Nulos en `divipola_departamento` (T3)** | 0 | 0 | Sí, todos los códigos eran numéricos válidos y no se generaron nulos nuevos. |
 | **Valores distintos en `region` (T4)** | 8 | 8 | Sí, se mantienen exactamente las mismas 8 regiones tras renombrar la columna. |
 | **Valores distintos en `clasificacion` (T5)** | 12 | 12 | Sí, se mantienen exactamente las mismas 12 categorías tras renombrar la columna. |
+
+### Resultado detallado de la ejecución en BigQuery
+
+| Control | Valor |
+| :--- | :---: |
+| `01 filas en el bruto` | 4243 |
+| `02 filas en el staging` | 4243 |
+| `03 T1: id_fila nulos` | 0 |
+| `04 T1: id_fila distintos` | 4243 |
+| `05 T2: fecha_de_solicitud nulos antes` | 0 |
+| `06 T2: fecha_de_solicitud nulos después` | 0 |
+| `07 T3: divipola_departamento nulos antes` | 0 |
+| `08 T3: divipola_departamento nulos después` | 0 |
+| `09 T4: region distintos antes` | 8 |
+| `10 T4: region distintos después` | 8 |
+| `11 T5: clasificacion distintos antes` | 12 |
+| `12 T5: clasificacion distintos después` | 12 |
+
+## Mi consulta en 3 respuestas (S4)
+
+**Consulta:** `sql/stg_agi2_ekag.sql`
+
+1. **Los controles 01, 02 y 04 dan exactamente 4243 y el control 03 da 0. ¿Qué demuestra esta combinación de cifras sobre la calidad y la granularidad de los datos que cargaste al staging?**
+   - **Respuesta:** Esto se debe a que los controles 01, 02 y 04 son de búsqueda los controles `01 y 02` cuentan todas las filas de la base de datos, mientras el control `04` cuenta los id distintos, esto es correcto debido a que los id deben ser diferentes cada uno y por eso ellos 3 tienen los mismos resultados, mientras el control `03` está buscando los id nulos, como en la base de datos todas las filas tienen un id único, entonces marca que tiene 0 (cero) nulos.
+
+2. **En la regla T2 recortaste los primeros 10 caracteres de `fecha_de_solicitud` antes de usar `SAFE_CAST(... AS DATE)`, y en T3 convertiste `divipola_departamento` a número con `SAFE_CAST` en lugar de dejarlo como texto. ¿Por qué son necesarias estas dos transformaciones para responder la pregunta de negocio de tu proyecto?**
+   - **Respuesta:** Estas son transformaciones necesarias para el análisis de datos y la creación del tablero, estando el texto no se reconocerían bien y no dejaría realizar los filtros correctamente como incidentes por año o por departamento.
+
+3. **Si quitaras el recorte de caracteres (`SUBSTR`) de la regla T2, o si mañana la API del ColCERT enviara en `divipola_departamento` un texto como `"Sin información"` o `"No reporta"`, ¿qué pasaría con esos registros en tu vista de staging y cómo lo detectarías con tus cifras de control?**
+   - **Respuesta:** Los registros quedarían como nulo en la base de datos, en las cifras de control aparecerían como datos nulos en los controles `05, 06, 07 y 08` donde los controles `05 y 07` entregan 0 (cero) nulos y los controles `06 y 08` entregan los nulos debido al error que se genera.
