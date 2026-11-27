@@ -14,7 +14,7 @@ Equipo E__12 · Análisis de Datos Intermedio · Estud-IA (Capa 2)
 | Cada cuánto se actualiza | Quincenalmente. | 
 | Dato a confirmar | Confirmar los valores exactos de dominio (catálogo de categorías) de las columnas importancia (ej. Alta, Media, Baja según Resolución 500 de 2021), orden_de_la_entidad y clasificaci_n_taxonom_a mediante una consulta GROUP BY al endpoint para validar que no existan nulos, duplicados ortográficos o variaciones de mayúsculas/minúsculas. | 
 | Tres indicadores | 1. Porcentaje de incidentes de importancia crítica/alta sobre el total de incidentes por sector (% Incidentes Críticos por Sector). · 2. Tasa de variación quincenal de incidentes por tipo de ataque (Variación % Quincenal por Tipo de Incidente). · 3. Índice de concentración territorial (% de incidentes por Región / Departamento frente al total nacional). |
-| Terminó bien si… | Al consumir el API, el tablero cruza sin errores de nulos o categorías duplicadas las 5.699 filas vigentes y responde en una sola vista qué sector lidera los incidentes de mayor importancia y cuál es su vector de ataque principal (Sí / No verificable por cualquier revisor). | 
+| Terminó bien si… | Al consumir el API, el tablero cruza sin errores de nulos o categorías duplicadas las 4243 filas vigentes y responde en una sola vista qué sector lidera los incidentes de mayor importancia y cuál es su vector de ataque principal (Sí / No verificable por cualquier revisor). | 
 | No vamos a construir | Trazabilidad por entidad específica (los registros están anonimizados a nivel de sector y orden de entidad). | 
 
 ## Contrato de datos
